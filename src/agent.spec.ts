@@ -13,6 +13,7 @@ import agent, {
 } from "./agent";
 
 import { TestTransactionEvent } from "forta-agent-tools/lib/tests";
+import { createAddress } from "forta-agent-tools/lib/tests";
 
 
 describe("Nethermind bot deploy bot", () => {
@@ -27,7 +28,7 @@ describe("Nethermind bot deploy bot", () => {
 
     it("returns empty findings if there are no createAgent calls & there is no interaction with the Forta contract & the transaction was not sent by Nethermind", async () => {
       
-      const transaction: TransactionEvent = new TestTransactionEvent().setFrom("0x0").setTo("0x0");
+      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(createAddress("0x0")).setTo(createAddress("0x0"));
       const findings = await agent.handleTransaction(transaction);
 
       expect(findings).toStrictEqual([]);
@@ -36,7 +37,7 @@ describe("Nethermind bot deploy bot", () => {
 
     it("returns empty findings if there is interaction with the Forta contract but there are no createAgent calls & the transaction was not sent by Nethermind", async () => {
       
-      const transaction: TransactionEvent = new TestTransactionEvent().setFrom("0x0").setTo(FORTA_ADDRESS);
+      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(createAddress("0x0")).setTo(FORTA_ADDRESS);
       const findings = await agent.handleTransaction(transaction);
 
       expect(findings).toStrictEqual([]);
@@ -45,7 +46,7 @@ describe("Nethermind bot deploy bot", () => {
 
     it("returns empty findings if the transaction was sent by Nethermind but there are no createAgent calls & there is no interaction with the Forta contract", async () => {
       
-      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(NETHERMIND_BOT_DEPLOY_ADDRESS).setTo("0x0");
+      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(NETHERMIND_BOT_DEPLOY_ADDRESS).setTo(createAddress("0x0"));
       const findings = await agent.handleTransaction(transaction);
 
       expect(findings).toStrictEqual([]);
@@ -54,7 +55,7 @@ describe("Nethermind bot deploy bot", () => {
 
     it("returns empty findings if there is interaction with the Forta contract & there are createAgent calls but the transaction was not sent by Nethermind", async () => {
       
-      const transaction: TransactionEvent = new TestTransactionEvent().setFrom("0x0").setTo(FORTA_ADDRESS).setData(data);
+      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(createAddress("0x0")).setTo(FORTA_ADDRESS).setData(data);
       const findings = await agent.handleTransaction(transaction);
 
       expect(findings).toStrictEqual([]);
@@ -63,7 +64,7 @@ describe("Nethermind bot deploy bot", () => {
 
     it("returns empty findings if there are createAgent calls & the transaction was sent by Nethermind but there is no interaction with the Forta contract", async () => {
       
-      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(NETHERMIND_BOT_DEPLOY_ADDRESS).setTo("0x0").setData(data);
+      const transaction: TransactionEvent = new TestTransactionEvent().setFrom(NETHERMIND_BOT_DEPLOY_ADDRESS).setTo(createAddress("0x0")).setData(data);
       const findings = await agent.handleTransaction(transaction);
 
       expect(findings).toStrictEqual([]);
